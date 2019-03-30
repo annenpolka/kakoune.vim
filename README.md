@@ -17,5 +17,8 @@ nmap <CR> <Plug>(Kakoune)
 vmap <CR> <Plug>(Kakoune)
 ```
 
+- From Vim: Press <kbd>Return</kbd> to call Kakoune.
+- From Kakoune: Press <kbd>Escape</kbd> to save and quit.
+
 [Kakoune]: https://kakoune.org
 [Vim]: https://vim.org
