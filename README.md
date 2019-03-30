@@ -1,6 +1,6 @@
 # Vim / Kakoune
 
-> [Kakoune] integration for [Vim].
+> [Kakoune] integration for [Vim] and [Neovim].
 
 ## Installation
 
@@ -22,3 +22,4 @@ vmap <CR> <Plug>(Kakoune)
 
 [Kakoune]: https://kakoune.org
 [Vim]: https://vim.org
+[Neovim]: https://neovim.io
