@@ -32,5 +32,5 @@ function s:selection(visual)
   endif
 endfunction
 
-nnoremap <Plug>(Kakoune) :execute <SID>call(0)<CR>
-vnoremap <Plug>(Kakoune) :<C-U>execute <SID>call(1)<CR>
+nnoremap <Plug>(Kakoune) :call <SID>call(0)<CR>
+vnoremap <Plug>(Kakoune) :<C-U>call <SID>call(1)<CR>
