@@ -1,6 +1,6 @@
 # Vim / Kakoune
 
-> [Kakoune] integration for [Vim] and [Neovim].
+> [Kakoune] integration for [Vim] and [Neovim] users – who want to switch to Kakoune progressively.
 
 ## Installation
 
