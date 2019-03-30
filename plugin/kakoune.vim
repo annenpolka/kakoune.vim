@@ -19,7 +19,7 @@ function s:call(visual)
     \   "
     \ '
   let options = has('nvim') ? '' : '++curwin ++close'
-  execute printf(command, options, file, anchor_line, anchor_column, cursor_line, cursor_column)
+  execute printf(command, options, shellescape(file), anchor_line, anchor_column, cursor_line, cursor_column)
   startinsert
 endfunction
 
