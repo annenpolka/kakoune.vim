@@ -12,14 +12,15 @@ function s:call(visual)
   let [anchor_line, anchor_column, cursor_line, cursor_column] = s:selection(a:visual)
   let command = '
     \ terminal %s
-    \   kak %s -e "
+    \   kak -e "
+    \     edit \%%(%s);
     \     select %d.%d,%d.%d;
     \     colorscheme default;
     \     map buffer normal <esc> :write-quit<ret>;
     \   "
     \ '
   let options = has('nvim') ? '' : '++curwin ++close'
-  execute printf(command, options, shellescape(file), anchor_line, anchor_column, cursor_line, cursor_column)
+  execute printf(command, options, file, anchor_line, anchor_column, cursor_line, cursor_column)
   startinsert
 endfunction
 
