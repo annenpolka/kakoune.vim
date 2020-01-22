@@ -1,4 +1,4 @@
-# Vim / Kakoune
+# kakoune.vim
 
 > [Kakoune] integration for [Vim] and [Neovim] users – who want to switch to Kakoune progressively.
 
