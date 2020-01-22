@@ -4,11 +4,7 @@
 
 ## Installation
 
-Add to your `vimrc`:
-
-``` vim
-set runtimepath+=~/repositories/github.com/alexherbo2/kakoune.vim
-```
+Add [kakoune.vim](.) to your `runtimepath`.
 
 ## Usage
 
