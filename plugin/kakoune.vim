@@ -36,3 +36,4 @@ nnoremap <Plug>(Kakoune) :call <SID>call(0)<CR>
 vnoremap <Plug>(Kakoune) :<C-U>call <SID>call(1)<CR>
 
 command! Kakoune call  <SID>call(0)
+command! KakouneVisual call  <SID>call(1)
