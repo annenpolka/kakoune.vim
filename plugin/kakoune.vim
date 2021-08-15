@@ -1,4 +1,7 @@
 function s:call(visual)
+  if has('nvim')
+    au! TermClose *:kak* call feedkeys("i")
+  endif
   let file = expand('%')
   if ! filereadable(file)
     echoerr 'The current buffer has no associated file'
