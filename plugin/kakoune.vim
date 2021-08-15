@@ -1,4 +1,4 @@
-function s:call(visual)
+function s:call(visual, escape_key)
   if has('nvim')
     au! TermClose *:kak* call feedkeys("i")
   endif
@@ -19,11 +19,11 @@ function s:call(visual)
     \     edit \%%(%s);
     \     select %d.%d,%d.%d;
     \     colorscheme default;
-    \     map buffer normal <esc> :write-quit<ret>;
+    \     map buffer normal %s :write-quit<ret>;
     \   "
     \ '
   let options = has('nvim') ? '' : '++curwin ++close'
-  execute printf(command, options, file, anchor_line, anchor_column, cursor_line, cursor_column)
+  execute printf(command, options, file, anchor_line, anchor_column, cursor_line, cursor_column, escape_key)
   startinsert
 endfunction
 
@@ -38,5 +38,5 @@ endfunction
 nnoremap <Plug>(Kakoune) :call <SID>call(0)<CR>
 vnoremap <Plug>(Kakoune) :<C-U>call <SID>call(1)<CR>
 
-command! Kakoune call  <SID>call(0)
-command! KakouneVisual call  <SID>call(1)
+command! -nargs=1 Kakoune call  <SID>call(0, <q-args>)
+command! -nargs=1 KakouneVisual call  <SID>call(1, <q-args>)
