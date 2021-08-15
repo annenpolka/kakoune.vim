@@ -22,6 +22,7 @@ function s:call(visual)
   let options = has('nvim') ? '' : '++curwin ++close'
   execute printf(command, options, file, anchor_line, anchor_column, cursor_line, cursor_column)
   startinsert
+  call  feedkeys("<Esc>")
 endfunction
 
 function s:selection(visual)
