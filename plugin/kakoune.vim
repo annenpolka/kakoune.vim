@@ -1,6 +1,6 @@
 let s:FILE_NAME = "position.temp"
 
-function s:start_kak(visual, escape_key)
+function! s:start_kak(visual, escape_key)
   au! TermClose *:kak* call s:end_kak()
     
   let file = expand('%')
@@ -33,7 +33,7 @@ function s:start_kak(visual, escape_key)
   startinsert
 endfunction
   
-function s:selection(visual)
+function! s:selection(visual)
   if a:visual
     return [line("'<"), col("'<"), line("'>"), col("'>")]
   else
@@ -41,7 +41,7 @@ function s:selection(visual)
   endif
 endfunction
 
-function s:end_kak()
+function! s:end_kak()
   let position = split(readfile(s:FILE_NAME)[0]," ")
   call delete(s:FILE_NAME)
   bd!
