@@ -24,7 +24,7 @@ function! s:start_kak(visual, escape_key)
     \     execute-keys vv;
     \     colorscheme default;
     \     map buffer normal %s :write-quit<ret>;
-    \     hook global NormalIdle .* \%%{ echo -to-file %s \%%val{cursor_line} \%%val{cursor_char_column} };
+    \     hook global NormalKey .* \%%{ echo -to-file %s \%%val{cursor_line} \%%val{cursor_char_column} };
     \   "
     \ '
   let options = has('nvim') ? '' : '++curwin ++close'
