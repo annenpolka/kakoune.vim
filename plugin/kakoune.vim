@@ -14,7 +14,7 @@ function! s:start_kak(visual, escape_key)
     return
   endif
   write
-  call writefile([line("."),col(".")], s:FILE_NAME, "S")
+  call writefile([line("."),col(".")], s:FILE_NAME)
   let [anchor_line, anchor_column, cursor_line, cursor_column] = s:selection(a:visual)
   let kak_command = '
     \   %s
