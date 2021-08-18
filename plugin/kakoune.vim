@@ -20,19 +20,22 @@ function s:execute_kak(file, visual, escape_key)
   let [anchor_line, anchor_column, cursor_line, cursor_column] = s:selection(a:visual)
   call writefile([anchor_line .. "." .. anchor_column .. ","
         \     .. cursor_line .. "." .. cursor_column], s:POSITION_FILE_NAME)
-  let kak_command_start = printf('%s kak -e "', has('nvim') ? '' : '++curwin ++close ')
+  let kak_command_start = 'kak -e "'
   let kak_edit_file = printf('edit \%%(%s); ', a:file)
   let kak_select = printf('select %d.%d,%d.%d; ', anchor_line, anchor_column, cursor_line, cursor_column)
   let kak_colorscheme = 'colorscheme default; '
   let kak_map_escape = printf('map buffer normal %s :write-quit<ret>; ', a:escape_key)
   let kak_cursor_hook = printf('hook global NormalKey .* \%%{ echo -to-file %s \%%val{selection_desc} }; ', s:POSITION_FILE_NAME)
+  let kak_centerize_line = "execute-keys vv"
   let kak_command_end = '"'
 
   let kak_command_body = kak_edit_file .
         \                kak_select .
         \                kak_colorscheme .
         \                kak_map_escape .
-        \                kak_cursor_hook
+        \                kak_cursor_hook .
+        \                kak_centerize_line
+  
 
   let final_input = kak_command_start .
         \           kak_command_body .
@@ -43,7 +46,6 @@ endfunction
 
 function! s:end_kak()
   let positions = split(readfile(s:POSITION_FILE_NAME)[0], ",")
-  echom positions
   bd!
   if positions[0] ==? positions[1]
     let position_set = split(positions[0], "\\.")
