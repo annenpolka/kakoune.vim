@@ -1,7 +1,6 @@
 let s:POSITION_FILE_NAME = "position.temp"
 
 function! s:start_kak(visual, options, ...) range
-  echom a:
   let option_list = split(a:options, " ")
   let escape_key = get(option_list, 0, "<esc>")
   let operator_key = get(option_list, 1, "")
