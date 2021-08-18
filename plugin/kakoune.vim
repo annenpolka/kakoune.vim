@@ -61,9 +61,7 @@ function! s:end_kak()
     call cursor(position_set[0], position_set[1])
   else
     let start_position = split(positions[0], "\\.")
-    echom start_position
     let end_position = split(positions[1], "\\.")
-    echom end_position
     call setpos("'<", [bufnr(), start_position[0], start_position[1]])
     call setpos("'>", [bufnr(), end_position[0], end_position[1]])
     normal! gv
