@@ -1,18 +1,21 @@
 let s:POSITION_FILE_NAME = "position.temp"
 
-function! s:start_kak(visual, escape_key) range
+function! s:start_kak(visual, options) range
+  let option_list = split(a:options, " ")
+  let escape_key = get(option_list, 0, "<esc>")
+  
   au! TermClose *:kak* call s:end_kak()
 
   let file = expand('%')
-  if ! filereadable(file)
+  if !filereadable(file)
     echoerr 'The current buffer has no associated file'
     return
   endif
- if ! filewritable(file)
+ if !filewritable(file)
     echoerr 'The associated file cannot be written'
     return
   endif
-  call s:execute_kak(file, a:visual, a:escape_key)
+  call s:execute_kak(file, a:visual, escape_key)
 endfunction
 
 function s:execute_kak(file, visual, escape_key)
@@ -26,7 +29,7 @@ function s:execute_kak(file, visual, escape_key)
   let kak_colorscheme = 'colorscheme default; '
   let kak_map_escape = printf('map buffer normal %s :write-quit<ret>; ', a:escape_key)
   let kak_cursor_hook = printf('hook global NormalKey .* \%%{ echo -to-file %s \%%val{selection_desc} }; ', s:POSITION_FILE_NAME)
-  let kak_centerize_line = "execute-keys vv"
+  let kak_centerize_command = "execute-keys vv"
   let kak_command_end = '"'
 
   let kak_command_body = kak_edit_file .
@@ -34,7 +37,7 @@ function s:execute_kak(file, visual, escape_key)
         \                kak_colorscheme .
         \                kak_map_escape .
         \                kak_cursor_hook .
-        \                kak_centerize_line
+        \                kak_centerize_command
   
 
   let final_input = kak_command_start .
@@ -71,5 +74,5 @@ function! s:selection(visual)
   endif
 endfunction
 
-command! -nargs=1 Kakoune call  <SID>start_kak(0, <q-args>)
-command! -range -nargs=1 KakouneVisual call  <SID>start_kak(1, <q-args>)
+command! -nargs=* Kakoune call  <SID>start_kak(0, <q-args>)
+command! -range -nargs=* KakouneVisual call  <SID>start_kak(1, <q-args>)
