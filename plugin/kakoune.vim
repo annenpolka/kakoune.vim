@@ -3,6 +3,7 @@ let s:POSITION_FILE_NAME = "position.temp"
 function! s:start_kak(visual, options) range
   let option_list = split(a:options, " ")
   let escape_key = get(option_list, 0, "<esc>")
+  let operator_key = get(option_list, 1, "")
   
   au! TermClose *:kak* call s:end_kak()
 
@@ -15,10 +16,10 @@ function! s:start_kak(visual, options) range
     echoerr 'The associated file cannot be written'
     return
   endif
-  call s:execute_kak(file, a:visual, escape_key)
+  call s:execute_kak(file, a:visual, escape_key, operator_key)
 endfunction
 
-function s:execute_kak(file, visual, escape_key)
+function s:execute_kak(file, visual, escape_key, operator_key)
   write
   let [anchor_line, anchor_column, cursor_line, cursor_column] = s:selection(a:visual)
   call writefile([anchor_line .. "." .. anchor_column .. ","
@@ -29,7 +30,7 @@ function s:execute_kak(file, visual, escape_key)
   let kak_colorscheme = 'colorscheme default; '
   let kak_map_escape = printf('map buffer normal %s :write-quit<ret>; ', a:escape_key)
   let kak_cursor_hook = printf('hook global NormalKey .* \%%{ echo -to-file %s \%%val{selection_desc} }; ', s:POSITION_FILE_NAME)
-  let kak_centerize_command = "execute-keys vv"
+  let kak_centerize_command = "execute-keys vv;"
   let kak_command_end = '"'
 
   let kak_command_body = kak_edit_file .
@@ -38,7 +39,12 @@ function s:execute_kak(file, visual, escape_key)
         \                kak_map_escape .
         \                kak_cursor_hook .
         \                kak_centerize_command
-  
+
+  if a:operator_key != ''
+    let kak_operate_command = printf("execute-keys %s;", a:operator_key)
+    let kak_command_body = kak_command_body .
+          \                kak_operate_command
+  endif
 
   let final_input = kak_command_start .
         \           kak_command_body .
