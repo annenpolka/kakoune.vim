@@ -1,9 +1,11 @@
 let s:POSITION_FILE_NAME = "position.temp"
 
-function! s:start_kak(visual, options) range
+function! s:start_kak(visual, options, ...) range
+  echom a:
   let option_list = split(a:options, " ")
   let escape_key = get(option_list, 0, "<esc>")
   let operator_key = get(option_list, 1, "")
+  let select_mode = get(a:, 1, "")
   
   au! TermClose *:kak* call s:end_kak()
 
@@ -16,10 +18,10 @@ function! s:start_kak(visual, options) range
     echoerr 'The associated file cannot be written'
     return
   endif
-  call s:execute_kak(file, a:visual, escape_key, operator_key)
+  call s:execute_kak(file, a:visual, escape_key, operator_key, select_mode)
 endfunction
 
-function s:execute_kak(file, visual, escape_key, operator_key)
+function s:execute_kak(file, visual, escape_key, operator_key, select_mode)
   write
   let [anchor_line, anchor_column, cursor_line, cursor_column] = s:selection(a:visual)
   call writefile([anchor_line .. "." .. anchor_column .. ","
@@ -39,18 +41,30 @@ function s:execute_kak(file, visual, escape_key, operator_key)
         \                kak_map_escape .
         \                kak_cursor_hook .
         \                kak_centerize_command
-
+  
   if a:operator_key != ''
-    let kak_operate_command = printf("execute-keys %s;", a:operator_key)
+    let kak_operator_command = printf("execute-keys %s", a:operator_key)
     let kak_command_body = kak_command_body .
-          \                kak_operate_command
+          \                kak_operator_command
   endif
 
+  let kak_s_mode_command = ""
+  if a:select_mode == "inner"
+    let kak_s_mode_command = "execute-keys <A-i>"
+  elseif a:select_mode == "outer"
+    let kak_s_mode_command = "execute-keys <A-a>"
+  endif
+  if kak_s_mode_command != ""
+    let kak_command_body = kak_command_body .
+          \                kak_s_mode_command
+  endif
+  
   let final_input = kak_command_start .
         \           kak_command_body .
         \           kak_command_end
   execute 'terminal' final_input
   startinsert
+  
 endfunction
 
 function! s:end_kak()
@@ -79,4 +93,6 @@ function! s:selection(visual)
 endfunction
 
 command! -nargs=* Kakoune call  <SID>start_kak(0, <q-args>)
+command! -nargs=* KakouneSelectInner call  <SID>start_kak(0, <q-args>, "inner")
+command! -nargs=* KakouneSelectOuter call  <SID>start_kak(0, <q-args>, "outer")
 command! -range -nargs=* KakouneVisual call  <SID>start_kak(1, <q-args>)
