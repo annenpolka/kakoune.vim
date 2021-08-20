@@ -2,8 +2,9 @@ let s:POSITION_FILE_NAME = "position.temp"
 
 function! s:start_kak(visual, options, ...) range
   let option_list = split(a:options, " ")
-  let escape_key = get(option_list, 0, "<esc>")
-  let operator_key = get(option_list, 1, "")
+  
+  let escape_key = exists("g:kak_escape_key") ? g:kak_escape_key : "<esc>"
+  let operator_key = get(option_list, 0, "")
   let select_mode = get(a:, 1, "")
   
   au! TermClose *:kak* call s:end_kak()
